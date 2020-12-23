@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
+    show CalendarCarousel;
 
 import 'item.dart';
 
@@ -10,12 +12,17 @@ class ItemsList extends StatefulWidget {
 class _ItemsListState extends State<ItemsList> {
   final _todoList = <Item>[];
   final _itemFont = TextStyle(fontSize: 18.0);
-  void _itemView() {
+  void _itemView(Item item) {
     Navigator.of(context)
         .push(MaterialPageRoute<void>(builder: (BuildContext context) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Todo Item'),
+          title: Text('Placeholder Name'),
+        ),
+        body: CalendarCarousel(
+          onDayLongPressed: (DateTime date) {
+            this.setState(() => item.date = date);
+          },
         ),
       );
     }));
@@ -27,12 +34,12 @@ class _ItemsListState extends State<ItemsList> {
       appBar: AppBar(
         title: Text("Todo List"),
         actions: [
-          IconButton(icon: Icon(Icons.check), onPressed: null),
+          IconButton(icon: Icon(Icons.check), onPressed: _itemView(null))
         ],
       ),
       body: _buildList(),
       floatingActionButton: FloatingActionButton(
-        onPressed: _itemView,
+        onPressed: _itemView(new Item("bob", 1, date)),
         tooltip: "Add new item",
         backgroundColor: Colors.green,
         child: Icon(Icons.add),
@@ -62,7 +69,7 @@ class _ItemsListState extends State<ItemsList> {
       ),
       trailing: Icon(Icons.check),
       onTap: () {
-        //navigate to that view
+        _itemView();
       },
     );
   }
